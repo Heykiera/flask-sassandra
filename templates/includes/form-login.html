@@ -1,0 +1,17 @@
+<div class="sign-in">
+    <link rel="stylesheet" href="../static/css/sign.css">
+    <form action="/login" method="post">
+        <div class="sign">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" size="45" pattern="[a-zA-Z0-9_-]{3,20}" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+            
+            <button type="submit">Login</button>
+            <div class="bg-login">
+                <span class="psw">Forgot <a href="{{ url_for('index') }}">password?</a></span>
+            </div>
+        </div>
+    </form>
+</div>

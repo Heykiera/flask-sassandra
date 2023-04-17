@@ -1,0 +1,16 @@
+<a href="{{ url_for('params') }}">
+    <div class="user-info">
+        {% if current_user.is_authenticated %}
+        <div class="user-profile-picture">
+            <img src="{{ url_for('static', filename='uploads/' + current_user.profile_image) }}" alt="User Picture">
+        </div>
+        <div class="user-details"> 
+            <h3 class="username">@{{ current_user.username }}</h3>
+            <p class="user-email">{{ current_user.email }}</p>
+        </div>
+        {% endif %}
+        <div class="settings-icon">
+            <img src="../static/img/svg/settings-gear.svg">
+        </div>
+    </div>
+</a>

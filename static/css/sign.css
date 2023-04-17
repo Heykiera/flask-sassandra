@@ -1,0 +1,79 @@
+input:invalid {
+    border:solid 0.2rem crimson;
+}
+input:valid {
+    border:solid 0.2rem forestgreen;
+}
+.or {
+    color: var(--section-input);
+    text-align: center;
+}
+.sign {
+    width: 100%;
+    padding: 2rem;
+    color: var(--sidebar-color);
+}
+.sign > * {
+    width: 100%;
+    margin-bottom: 0.4rem;
+}
+.sign a {
+    color: red;
+}
+.sign input {
+    height: 2rem;
+    border-radius: 0.6rem;
+}
+.sign button {
+    cursor: pointer;
+    border-radius: 0.2rem;
+    font-weight: 600;
+    padding: 0.8rem;
+    box-shadow: 0 0 0.4rem rgba(104, 85, 224, 0.2);
+    transition: 0.4s;
+    color: var(--sidebar-color) ;
+    background-color: var(--login-input);
+    border: none;
+    border:solid 0.2rem var(--sidebar-color);
+    border-radius: 1rem;
+}
+.sign-profile {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between 2rem;
+}
+
+.sign-picture {   
+    width: 4rem;
+    height: 4rem;
+    border-radius: 5%;
+    overflow: hidden;
+    margin-right: 0.4rem;
+    border:solid 0.2rem var(--sidebar-color);
+    background-color: lightseagreen;
+}
+
+.sign-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+}
+
+.sign-file {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.sign-file:hover{
+    cursor: pointer;
+}
+.sign button:hover {
+    color: var(--sidebar-color);
+    background-color: var(--login-input);
+    cursor: pointer;
+}

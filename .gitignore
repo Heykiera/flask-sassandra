@@ -1,0 +1,7 @@
+# Ignorer les répertoire 
+__pycache__
+venv
+migrations
+
+# Ignorer tous les fichiers 
+.flaskenv
