@@ -1,6 +1,6 @@
 <div class="sign-in">
     <link rel="stylesheet" href="../static/css/sign.css">
-    <form action="/login" method="post">
+    <form id="login-form" action="/login" method="post">
         <div class="sign">
             <label for="uname"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="uname" size="45" pattern="[a-zA-Z0-9_-]{3,20}" required>
@@ -12,6 +12,8 @@
             <div class="bg-login">
                 <span class="psw">Forgot <a href="{{ url_for('index') }}">password?</a></span>
             </div>
+            <div id="login-errors"></div>
+            <script src="../../static/js/login.js"></script>
         </div>
     </form>
 </div>

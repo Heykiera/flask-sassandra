@@ -27,10 +27,11 @@
                             <li><label><input type="checkbox"><span>Animals & Pets</span></label></li>
                             <li><label><input type="checkbox"><span>Girls</span></label></li>
                             <li><label><input type="checkbox"><span>Memes</span></label></li>
-                            <li><label><input type="checkbox"><span>Funny</span></label></li>
                             <li><label><input type="checkbox"><span>Divers</span></label></li>
                             <li><label><input type="checkbox"><span>Motor vehicules</span></label></li>
                             <li><label><input type="checkbox"><span>Movies & TV</span></label></li>
+                            <li><label><input type="checkbox"><span>Arts & Draws</span></label></li>
+                            <li><label><input type="checkbox"><span>Music & Song</span></label></li>
                         </ul>
                     </li>         
                     <li><button class="btn"><span>
@@ -67,7 +68,7 @@
                     </li>   
                     <li><button class="btn"><span>
                         <a href="{{url_for('git')}}"><img src="../static/img/svg/git.svg" alt=""></a>
-                    </span><span>Git</span></button>
+                    </span><span>Gitfolio</span></button>
                         <ul class="hide">
                             <li><label><input type="checkbox"><span>azzez</span></label></li>
                             <li><label><input type="checkbox"><span>azzez</span></label></li>
@@ -103,12 +104,11 @@
         <div class="post">
             <p> {{ err }} </p>
             {% if current_user.is_authenticated %}
-                <p>Hi {{ current_user.username }}!</p>
+                <p>Hi {{ current_user.username }}</p>
                 <p>Contact : {{ current_user.email }}</p>
             {% endif %}
-            <br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br>
-            <br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br>
         </div>
     </section>    
     {% include "includes/footer.html" %}

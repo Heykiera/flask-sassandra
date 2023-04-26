@@ -88,7 +88,6 @@ footer {
     color: var(--sidebar-input);
     left: 30%;
     width: 70%;
-    bottom: 0%;
     padding: 2rem;
     background-color: var(--sidebar-profile);
     display: table;
@@ -155,6 +154,7 @@ footer i {
     font-size: 1.6rem; 
     color: var(--section-color);
     width: 50%;
+    cursor: pointer;
 } 
 #nav .btn:hover {
     background-color: var(--sidebar-profile);
@@ -163,6 +163,9 @@ footer i {
 #nav .active {
     background-color: var(--sidebar-profile);
     color: white;
+}
+.active img, .btn:hover img {
+    filter: brightness(0) saturate(100%) invert(94%) sepia(94%) saturate(3619%) hue-rotate(189deg) brightness(138%) contrast(100%);
 }
 #nav .btn :first-child {
     float: left;
@@ -184,6 +187,9 @@ footer i {
     fill: var(--section-input);
     margin: auto;
     margin-top: 0.1rem;
+}
+.logout img {
+    filter: brightness(0) saturate(100%) invert(94%) sepia(94%) saturate(3619%) hue-rotate(189deg) brightness(138%) contrast(100%);
 }
 
 .hide {
@@ -207,6 +213,7 @@ footer i {
     font-size: 1rem;
     border: solid 0.2rem var(--section-input);
     border-radius: 0.5rem;
+    cursor: pointer;
 }
 .hide input[type="checkbox"]:checked + span {
     background-color: var(--section-input);

@@ -1,4 +1,4 @@
-from flask import Flask, request, session, render_template, redirect, url_for
+from flask import Flask, request, session, render_template, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
@@ -106,9 +106,11 @@ def login():
             # redirect to home page
             return redirect(url_for('home'))
         # display error message
-        return render_template('index.html', err = 'Invalid username or password')
+        ### return render_template('index.html', err = 'Invalid username or password')
+        return jsonify({'message': 'Invalid username or password'}), 400
     # display login form
-    return render_template('index.html', err = 'Error exists. Please retry for fogin.')
+    ### return render_template('index.html', err = 'Error exists. Please retry for fogin.')
+    return jsonify({'message': 'Invalid username or password'}), 400
 
 @app.route('/home')
 @login_required
