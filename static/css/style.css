@@ -219,7 +219,12 @@ footer i {
     background-color: var(--section-input);
     color: var(--section-color);
 }
-.sidebar .user-info {
+.sidebar a .info {
+    position: sticky;
+    bottom: 0%;
+    left: 0%;
+}
+.user-info {
     position: absolute;
     bottom: 0%;
     left: 0%;

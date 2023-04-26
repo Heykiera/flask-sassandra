@@ -20,6 +20,7 @@ $(document).ready(function() {
         error: function(response) {
         // Display errors in login form
         $('#login-errors').html('<div class="alert alert-danger">' + response.responseJSON.message + '</div>');
+        window.location.href = '/index.html';
         }
     });
     });

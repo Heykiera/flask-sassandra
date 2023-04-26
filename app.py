@@ -90,7 +90,7 @@ def register():
     return render_template('index.html', err = 'Error exists. Please retry for register.')
 
 # login page
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         # get form data
