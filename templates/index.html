@@ -8,27 +8,45 @@
         <link rel="stylesheet" href="../static/css/style.css">
         <title>SASSANDRA</title>
     </head>
-    <div class="sidebar">
-        <h1 class="sidebar-title">SASSANDRA</h1>
-        
-        {% include 'includes/form-login.html' %}
-
-        <p class="or"> ---- Or -----</p>
-
-        {% include 'includes/form-register.html' %}
-
-    </div>
-    <section>
-        <h1 class="test">SASSANDRA</h1>
-        <div class="post">
-            <p> {{ err }} </p>
-            {% for user in data %}
-                <p> {{ user }} </p>
-            {% endfor %}
-            <br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br>
+    <body>
+        <div class="sidebar">
+            <h1 class="sidebar-title">SASSANDRA</h1>
+            {% include 'includes/form-login.html' %}
+            <div id="login-errors"></div>
+            <p class="or"> ---- Or -----</p>
+            {% include 'includes/form-register.html' %}
         </div>
-    </section>
-    {% include "includes/footer.html" %}
+        <section>
+            <h1 class="test">SASSANDRA</h1>
+            <div class="post">
+                <p> {{ err }} </p>
+                {% for user in data %}
+                    <p> {{ user }} </p>
+                {% endfor %}
+                <br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br>
+            </div>
+        </section>
+        {% include "includes/footer.html" %}
+    </body>
+    <script>
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+        form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+            });
+            if (response.ok) {
+                window.location = response.url; // redirect on success
+            } else {
+                const error = await response.json();
+                errorMessage.textContent = error.error;
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
 </html>

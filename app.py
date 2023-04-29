@@ -92,6 +92,7 @@ def register():
 # login page
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    print('caca')
     if request.method == 'POST':
         # get form data
         username = request.form['uname']
