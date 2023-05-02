@@ -7,7 +7,8 @@ from flask_wtf.file import FileField, FileAllowed
 from wtforms.validators import InputRequired, ValidationError, Length, DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-import os, re, string, secrets
+from email_validator import validate_email, EmailNotValidError
+import os, re, string, secrets,sys
 
 app = Flask(__name__)
 app.secret_key = 'my_secret_key' # secret key for sessions
@@ -47,6 +48,26 @@ def create_tables():
 def index():
     return render_template('index.html')
 
+# valid email
+def is_valid_email(email):
+    try:
+        print(email, file=sys.stderr)
+        valid = validate_email(email)
+        print(valid, file=sys.stderr)
+        print('*************', file=sys.stderr)
+        email = valid.email
+        return True
+    except EmailNotValidError as e:
+        return False
+
+# valid username
+def is_valid_username(username):
+    if len(username) < 3:
+        return False
+    if not re.match("^[a-zA-Z0-9_-]+$", username):
+        return False
+    return True
+
 # registration page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -66,15 +87,20 @@ def register():
         new_filename = random_string + file_ext
         # Save the uploaded file with the new filename
         profile_image.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename)) 
-
+        # Chech the username
+        if not is_valid_username(username):
+            return jsonify({'message': 'Invalid username'}), 400
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
             print('Username already exists. Please choose a different username.')
-            return render_template('index.html', err = 'Username already exists. Please choose a different username.')
+            return jsonify({'message':'Username already exists. Please choose a different username.'}), 400
+        # Check email
+        if not is_valid_email(email):
+            return jsonify({'message':'Invalid Email'}), 400
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             print('email already exists. Please choose a different email.')
-            return render_template('index.html', err = 'Email already exists. Please choose a different Email.')
+            return jsonify({'message':'Email already exists. Please choose a different Email.'}), 400
         # create new user
         new_user = User(username = username, email = email, password = password_hash, profile_image = new_filename)
         # add user to the database
@@ -83,34 +109,34 @@ def register():
         # log in the user
         login_user(new_user)
         # Create a session for test
-        session['username'] = username
+        session['email'] = username
         # redirect to home page
         return redirect(url_for('home'))
     # display registration form
-    return render_template('index.html', err = 'Error exists. Please retry for register.')
+    return jsonify({'message':'Error exists. Please retry for register.'}), 400
 
 # login page
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         # get form data
-        username = request.form['uname']
+        email = request.form['email']
         password = request.form['psw']
         # find user by username
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         # check if user exists and password is correct
         if user and check_password_hash(user.password, password):
             # log in the user
             login_user(user)
-            session['username'] = username
+            session['email'] = email
             # redirect to home page
             return redirect(url_for('home'))
         # display error message
         ### return render_template('index.html', err = 'Invalid username or password')
-        return jsonify({'message': 'Invalid username or password'}), 400
+        return jsonify({'message': 'Invalid email or password to login'}), 400
     # display login form
-    ### return render_template('index.html', err = 'Error exists. Please retry for fogin.')
-    return jsonify({'message': 'Invalid username or password'}), 400
+    ### return render_template('index.html', err = 'Error exists. Please retry for login.')
+    return jsonify({'message': 'Error exists. Please retry for login.'}), 400
 
 @app.route('/home')
 @login_required

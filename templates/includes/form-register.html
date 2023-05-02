@@ -1,6 +1,6 @@
 <div class="sign-up">
     <link rel="stylesheet" href="../static/css/sign.css">
-    <form action="/register" method="post" enctype="multipart/form-data">
+    <form id="register-form" action="/register" method="post" enctype="multipart/form-data">
         <div class="sign">
             <div class="sign-profile">
                 <div class="sign-picture"> 
@@ -11,19 +11,15 @@
                     <label for="file">Choisir une image</label>
                 </div>
             </div>
-
             <label for="uname"><b>Username*</b></label>
             <input type="text" placeholder="Enter Username" name="uname" pattern="[a-zA-Z0-9_-]{3,20}" required
             title="this should be unique and 3 to 20 characters (lowercase, uppercase) and digits">
-
-            <label for="email"><b>e-mail*</b></label>
+            <label for="email"><b>email*</b></label>
             <input type="text" placeholder="Enter e-mail" name="email"  
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-
             <label for="psw"><b>Password*</b></label>
             <input type="password" placeholder="Enter Password" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=.*\w).{8,}" required
             title="Must contain at least one number and one uppercase and lowercase letter, and special characters, at least 8 or more characters">
-            
             <button type="submit">Register</button>
         </div>
     </form>
