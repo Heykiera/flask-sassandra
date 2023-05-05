@@ -1,14 +1,14 @@
 from flask import Flask, request, session, render_template, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.validators import InputRequired, ValidationError, Length, DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from email_validator import validate_email, EmailNotValidError
-import os, re, string, secrets,sys
+import os, re, string, secrets,sys, random, json
 
 app = Flask(__name__)
 app.secret_key = 'my_secret_key' # secret key for sessions
@@ -20,11 +20,13 @@ migrate = Migrate(app, db)
 
 # user model
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, default=lambda: random.randint(10000000, 99999999))
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     profile_image = db.Column(db.String(120), nullable=True)
+    following = db.Column(db.JSON)
+    followers = db.Column(db.JSON)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -143,45 +145,76 @@ def login():
 def home():
     return render_template('home.html')
 
+@app.route('/following')
+def following():
+    return jsonify(current_user.following)
+
+@app.route('/followers')
+def followers():
+    return jsonify(current_user.followers)
+
+@app.route('/follow/<int:user_id>', methods=['POST'])
+@login_required
+def follow(user_id):
+    # Get the user to follow
+    user_to_follow = User.query.get(user_id)
+    if user_to_follow is None:
+        return jsonify({'error': 'User not found'}), 404
+    # Update the 'followers' field of the user to follow
+    followers = user_to_follow.followers
+    if followers is None:
+        followers = []
+    # Get the current user from the global context
+    followers.append({'id': current_user.id, 'username': current_user.username})
+    user_to_follow.followers = json.dumps(followers)
+    # Update the 'following' field of the current user
+    following = current_user.following
+    if following is None:
+        following = []
+    # Get the followed user from the global context
+    following.append({'id': user_to_follow.id, 'username': user_to_follow.username})
+    current_user.following = json.dumps(following)
+    # Commit changes to the database
+    db.session.commit()
+    # Return a JSON response with the updated followers and following lists
+    return jsonify({'message': f'Following {user_to_follow.username}'}), 200
+
+
+
 @app.route('/messages')
 @login_required
 def messages():
-    return render_template('not-yet.html')
+    return render_template('home.html')
 
 @app.route('/groups')
 @login_required
 def groups():
-    return render_template('not-yet.html')
+    return render_template('home.html')
 
 @app.route('/events')
 @login_required
 def events():
-    return render_template('not-yet.html')
+    return render_template('home.html')
 
 @app.route('/projects')
 @login_required
 def projects():
-    return render_template('not-yet.html')
+    return render_template('home.html')
 
-@app.route('/git')
+@app.route('/gitfolio')
 @login_required
-def git():
-    return render_template('not-yet.html')
-
-@app.route('/cloud')
-@login_required 
-def cloud():
-    return render_template('not-yet.html')
+def gitfolio():
+    return render_template('home.html')
 
 @app.route('/sassandrin')
 @login_required
 def sassandrin():
-    return render_template('not-yet.html')
+    return render_template('home.html')
 
 @app.route('/params')
 @login_required
 def params():
-    return render_template('not-yet.html')
+    return render_template('home.html')
 
 # logout page
 @app.route('/logout')

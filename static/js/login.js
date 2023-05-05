@@ -8,9 +8,10 @@ event.preventDefault();
         body: formData,
     });
     if (response.ok) {
-    // Redirect to homepage on successful login
+    // Redirect to home on successful login
         window.location = response.url; 
     } else {
+        // set error message with json received from server flask
         const error = await response.json();
         errorMessage.textContent = error.message;
         errorMessage.style.display = 'block';
@@ -30,9 +31,10 @@ event.preventDefault();
         body: formData,
     });
     if (response.ok) {
-    // Redirect to homepage on successful register
+    // Redirect to home on successful register
         window.location = response.url; 
     } else {
+        // set error message with json received from server flask
         const error = await response.json();
         errorRegister.textContent = error.message;
         errorRegister.style.display = 'block';

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/css/bulma.min.css">
+        <link rel="stylesheet" href="../static/css/style.css">
+        <title>SASSANDRA</title>
+    </head>
+    <body>
+        <div id="sidebar" class="sidebar">
+            <nav class="nav-list">
+                <li>
+                    <button class="icon btn-list"><a href=" {{url_for('home')}} "><img src="../static/img/svg/home.svg" alt=""></a></button>
+                    <button class="select btn-list">Home</button>
+                    <ul class="hide themes">
+                        <li><label><input type="checkbox"><span>Lastedt News</span></label></li>
+                        <li><label><input type="checkbox"><span>Sports</span></label></li>
+                        <li><label><input type="checkbox"><span>Politics</span></label></li>
+                        <li><label><input type="checkbox"><span>Animes & Mangas</span></label></li>
+                        <li><label><input type="checkbox"><span>Sience & Tech</span></label></li>
+                        <li><label><input type="checkbox"><span>Gaming</span></label></li>
+                        <li><label><input type="checkbox"><span>Animals & Pets</span></label></li>
+                        <li><label><input type="checkbox"><span>Girls</span></label></li>
+                        <li><label><input type="checkbox"><span>Memes</span></label></li>
+                        <li><label><input type="checkbox"><span>Food & Drinks</span></label></li>
+                        <li><label><input type="checkbox"><span>Lifestyles</span></label></li>
+                        <li><label><input type="checkbox"><span>Divers</span></label></li>
+                        <li><label><input type="checkbox"><span>Motor vehicules</span></label></li>
+                        <li><label><input type="checkbox"><span>Movies & TV</span></label></li>
+                        <li><label><input type="checkbox"><span>Arts & Draws</span></label></li>
+                        <li><label><input type="checkbox"><span>Music & Song</span></label></li>
+                    </ul>
+                </li>
+                <li>
+                    <button class="icon btn-list"><a href=" {{url_for('events')}} "><img src="../static/img/svg/events.svg" alt=""></a></button>
+                    <button class="select btn-list">Events</button>
+                </li>
+                <li>
+                    <button class="icon btn-list"><a href=" {{url_for('projects')}} "><img src="../static/img/svg/projects.svg" alt=""></a></button>
+                    <button class="select btn-list">Projects</button>
+                </li>
+                <li>
+                    <button class="icon btn-list"><a href=" {{url_for('gitfolio')}} "><img src="../static/img/svg/git.svg" alt=""></a></button>
+                    <button class="select btn-list">Gitfolio</button>
+                </li>
+                <li>
+                    <button class="icon btn-list"><a href=" {{url_for('messages')}} "><img src="../static/img/svg/messages.svg" alt=""></a></button>
+                    <button class="select btn-list">Messages</button>
+                </li>
+                
+            </nav>
+            <div class="footer-sidebar">
+                <div class="user-info"></div>
+                <div class="settings"></div>
+            </div>
+        </div>
+        <header>
+            <h1>SASSANDRA</h1>
+        </header>
+        <div class="container">
+
+        </div>
+        <footer class="footer">
+
+        </footer>
+    </body>
+</html>
