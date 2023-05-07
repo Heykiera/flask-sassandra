@@ -1,7 +1,7 @@
 # flask-sassandra
 ## Social-Network Sassandra
 
-A project to social network with login, settings users, add users and instant messaging, post of images, videos, documents and songs, crypto-language (future will add portfolio and git ...)
+A project to social network with login, settings users, follow users and instant messaging, post of images, videos, documents and songs, crypto-language (future will add portfolio and git ...)
 
 ## Pre-requisites and first-time installation
 
