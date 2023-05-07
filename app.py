@@ -7,7 +7,7 @@ from flask_wtf.file import FileField, FileAllowed
 from wtforms.validators import InputRequired, ValidationError, Length, DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from email_validator import validate_email, EmailNotValidError
+from email_validator import EmailNotValidError, validate_email 
 import os, re, string, secrets,sys, random, json
 
 app = Flask(__name__)
