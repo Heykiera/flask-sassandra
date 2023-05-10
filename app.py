@@ -30,6 +30,24 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User %r>' % self.username
+    
+# Liste theme of post
+themes = ['Lastest News',
+        'Sports',
+        'Politics',
+        'Animes & Mangas',
+        'Sience & Tech',
+        'Gaming',
+        'Animals & Pets',
+        'Girls',
+        'Memes',
+        'Food & Drinks',
+        'Lifestyles',
+        'Divers',
+        'Motor vehicules',
+        'Movies & TV',
+        'Arts & Draws',
+        'Music & Song']
 
 # create login manager
 login_manager = LoginManager()
@@ -81,14 +99,17 @@ def register():
         # Hash the password
         password_hash = generate_password_hash(password)
         # Get the file image
-        profile_image = request.files['file']
-        # Generate a random string of 16 characters
-        random_string = ''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16))
-        # Assume profile_image is the uploaded image file
-        file_ext = os.path.splitext(profile_image.filename)[1]
-        new_filename = random_string + file_ext
-        # Save the uploaded file with the new filename
-        profile_image.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename)) 
+        if 'file' in request.files:
+            profile_image = request.files['file']
+            # Generate a random string of 16 characters
+            random_string = ''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16))
+            # Assume profile_image is the uploaded image file
+            file_ext = os.path.splitext(profile_image.filename)[1]
+            new_filename = random_string + file_ext
+            # Save the uploaded file with the new filename
+            profile_image.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
+        else:
+            return jsonify({'message':'Error exists about image. Please retry for register.'}), 400
         # Chech the username
         if not is_valid_username(username):
             return jsonify({'message': 'Invalid username'}), 400
@@ -153,32 +174,53 @@ def following():
 def followers():
     return jsonify(current_user.followers)
 
-@app.route('/follow/<int:user_id>', methods=['POST'])
+@app.route('/follow', methods=['POST'])
 @login_required
-def follow(user_id):
+def follow():
+    user_id = request.form['follow-id']
     # Get the user to follow
     user_to_follow = User.query.get(user_id)
     if user_to_follow is None:
         return jsonify({'error': 'User not found'}), 404
-    # Update the 'followers' field of the user to follow
-    followers = user_to_follow.followers
-    if followers is None:
-        followers = []
-    # Get the current user from the global context
+    if user_to_follow == current_user.id:
+        return jsonify({'error': 'You cannot follow yourself'}), 400
+    # Add the followed user to the current user's following list
+    following = json.loads(current_user.following) if current_user.following else []
+    following.append({'id': user_id, 'username': user_to_follow.username})
+    current_user.following = json.dumps(following)
+    # Add the current user to the followed user's followers list
+    followers = json.loads(user_to_follow.followers) if user_to_follow.followers else []
     followers.append({'id': current_user.id, 'username': current_user.username})
     user_to_follow.followers = json.dumps(followers)
-    # Update the 'following' field of the current user
-    following = current_user.following
-    if following is None:
-        following = []
-    # Get the followed user from the global context
-    following.append({'id': user_to_follow.id, 'username': user_to_follow.username})
-    current_user.following = json.dumps(following)
     # Commit changes to the database
     db.session.commit()
     # Return a JSON response with the updated followers and following lists
     return jsonify({'message': f'Following {user_to_follow.username}'}), 200
 
+@app.route('/unfollow', methods=['POST'])
+@login_required
+def unfollow():
+    username = request.form['unfollow-username']
+    # Get the user to unfollow
+    user_to_unfollow = User.query.filter_by(username=username).first()
+    if user_to_unfollow is None:
+        return jsonify({'error': 'User not found'}), 404
+    # Remove the username from the 'followers' field of the user to unfollow
+    followers = json.loads(user_to_unfollow.followers)
+    if current_user.username in followers:
+        followers.remove(current_user.username)
+    user_to_unfollow.followers = json.dumps(followers)
+    # Remove the followed user from the 'following' field of the current user
+    following = json.loads(current_user.following)
+    for user in following:
+        if user['username'] == username:
+            following.remove(user)
+            break
+    current_user.following = json.dumps(following)
+    # Commit changes to the database
+    db.session.commit()
+    # Return a JSON response with the updated followers and following lists
+    return jsonify({'message': f'Unfollowed {username}'}), 200
 
 
 @app.route('/messages')

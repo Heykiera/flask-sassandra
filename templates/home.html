@@ -98,7 +98,25 @@
             {% if current_user.is_authenticated %}
                 <p>Hi {{ current_user.username }}</p>
                 <p>Contact : {{ current_user.email }}</p>
+                <p>Followers : {{ current_user.followers }}</p>
+                <p>Following : {{ current_user.following }}</p>
             {% endif %}
+            <form id="follow-user" action="/follow" method="post">
+                <div class="follow">
+                    <label for="follow-id"><b>Follow user</b></label>
+                    <input type="text" placeholder="User ID" name="follow-id" size="45" required>
+
+                    <button type="submit">Follow</button>
+                </div>
+            </form>
+            <form id="unfollow-user" action="/unfollow" method="post">
+                <div class="follow">
+                    <label for="unfollow-username"><b>Unfollow user</b></label>
+                    <input type="text" placeholder="Username" name="unfollow-username" size="45" required>
+
+                    <button type="submit">Unfollow</button>
+                </div>
+            </form>
             <br><br><br><br><br><br><br><br><br><br>
             <br><br><br><br><br><br><br><br><br><br>
         </div>
