@@ -99,7 +99,10 @@ def register():
         # Hash the password
         password_hash = generate_password_hash(password)
         # Get the file image
-        if 'file' in request.files:
+        if 'file' not in request.files:
+            # Assume profile_image is the default image
+            new_filename = 'default_profile_image.png'
+        else:
             profile_image = request.files['file']
             # Generate a random string of 16 characters
             random_string = ''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16))
@@ -108,8 +111,6 @@ def register():
             new_filename = random_string + file_ext
             # Save the uploaded file with the new filename
             profile_image.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
-        else:
-            new_filename = 'default_profile_image.png'
         # Chech the username
         if not is_valid_username(username):
             return jsonify({'message': 'Invalid username'}), 400
