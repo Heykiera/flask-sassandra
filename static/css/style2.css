@@ -36,15 +36,22 @@
 /* ------------------------------------------------------------
 # KEYFRAMES (animation)
 ------------------------------------------------------------ */
-/* media query for phones
-@media screen and (max-width: 768px) {
-    aside {
-    top: auto;
-    left: 0;
-    right: 0;
-    height: 100px;
+/* media query for tablette */
+@media screen and (max-width: 700px) {
+    .aside {
+        width: 100%;
+        height: auto;
+        position: relative;
     }
-} */
+    div.content {margin-left: 0;}
+}
+/* media query for phones */
+@media screen and (max-width: 400px) {
+    .aside {
+        text-align: center;
+        float: none;
+    }
+}
 /* ------------------------------------------------------------
 # VARIABLES
 ------------------------------------------------------------ */
@@ -117,7 +124,14 @@ aside footer > * {
     display:inline-block;
     vertical-align:middle;
 }
+section {
+    width: calc(100% - 550px);
+    position: relative;
+    /* padding: 2rem; */
+    float: right;
+}
 section header {
+    padding: 0;
     font-size: xx-large;
     text-align: center;
     align-items: center;
@@ -134,10 +148,6 @@ section header::after {
 	top: 0.2rem;
 	transform: translateY(20%) skewY(-2.5deg);
 	border-top: 1rem solid var(--section-title);
-}
-section {
-    width: calc(100% - 550px);
-    float: right;
 }
 section footer {
     background-color: var(--sidebar-profile);
@@ -166,6 +176,7 @@ section footer {
     width: 70px;
     margin: 10px;
     border-radius: 10px;
+    object-fit: cover;
 }
 .settings {
     background-color: var(--section-title);
@@ -269,6 +280,9 @@ section footer {
 .column {
     float: left;
     width: 25%;
+}
+.container {
+    margin: 100px;
 }
 /* ------------------------------------------------------------ 
 # IDs

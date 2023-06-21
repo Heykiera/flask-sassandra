@@ -143,7 +143,7 @@ def register():
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # get form data
+        # get form data 
         email = request.form['email']
         password = request.form['psw']
         # find user by username
@@ -175,23 +175,26 @@ def following():
 def followers():
     return jsonify(current_user.followers)
 
-@app.route('/follow', methods=['POST'])
+@app.route('/follow', methods=['GET', 'POST'])
 @login_required
 def follow():
-    user_id = request.form['follow-id']
+    user_email = str(request.form['follow-email'])
+    print(f"######## email utilisé : {user_email}", file=sys.stderr)
     # Get the user to follow
-    user_to_follow = User.query.get(user_id)
+    user_to_follow = User.query.filter_by(email = user_email).first()
+    # Check if user exist
     if user_to_follow is None:
         return jsonify({'error': 'User not found'}), 404
-    if user_to_follow == current_user.id:
+    # Check if is yourself
+    if user_to_follow == current_user.email:
         return jsonify({'error': 'You cannot follow yourself'}), 400
     # Add the followed user to the current user's following list
     following = json.loads(current_user.following) if current_user.following else []
-    following.append({'id': user_id, 'username': user_to_follow.username})
+    following.append({'email': user_email, 'username': user_to_follow.username})
     current_user.following = json.dumps(following)
     # Add the current user to the followed user's followers list
     followers = json.loads(user_to_follow.followers) if user_to_follow.followers else []
-    followers.append({'id': current_user.id, 'username': current_user.username})
+    followers.append({'email': current_user.email, 'username': current_user.username})
     user_to_follow.followers = json.dumps(followers)
     # Commit changes to the database
     db.session.commit()
@@ -201,27 +204,29 @@ def follow():
 @app.route('/unfollow', methods=['POST'])
 @login_required
 def unfollow():
-    username = request.form['unfollow-username']
+    unfollow_email = request.form['unfollow-email']
     # Get the user to unfollow
-    user_to_unfollow = User.query.filter_by(username=username).first()
+    print(f"######## email utilisé : {unfollow_email}", file=sys.stderr)
+    user_to_unfollow = User.query.filter_by(email=unfollow_email).first()
+    print(f"######## User unfollow infos : {user_to_unfollow.followers}", file=sys.stderr)
     if user_to_unfollow is None:
         return jsonify({'error': 'User not found'}), 404
-    # Remove the username from the 'followers' field of the user to unfollow
+    # Remove the email from the 'followers' field of the user to unfollow
     followers = json.loads(user_to_unfollow.followers)
-    if current_user.username in followers:
-        followers.remove(current_user.username)
+    if current_user.email in followers:
+        followers.remove(current_user.email)
     user_to_unfollow.followers = json.dumps(followers)
     # Remove the followed user from the 'following' field of the current user
     following = json.loads(current_user.following)
     for user in following:
-        if user['username'] == username:
+        if user['email'] == unfollow_email:
             following.remove(user)
             break
     current_user.following = json.dumps(following)
     # Commit changes to the database
     db.session.commit()
     # Return a JSON response with the updated followers and following lists
-    return jsonify({'message': f'Unfollowed {username}'}), 200
+    return jsonify({'message': f'Unfollowed {unfollow_email}'}), 200
 
 
 @app.route('/messages')
@@ -254,9 +259,15 @@ def gitfolio():
 def sassandrin():
     return render_template('home.html')
 
-@app.route('/params')
+
+@app.route('/profile')
 @login_required
-def params():
+def profile():
+    return render_template('home.html')
+
+@app.route('/settings')
+@login_required
+def settings():
     return render_template('home.html')
 
 # logout page

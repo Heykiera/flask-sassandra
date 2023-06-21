@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/css/bulma.min.css">
+        <link rel="stylesheet" href="../static/css/style.css">
+        <title>SASSANDRA</title>
+    </head>
+    
+    <div class="sidebar">
+        <h1 class="sidebar-title">SASSANDRA</h1>
+        <nav>
+            <ul>
+                <div id="nav">
+                    <li><button class="btn active"><span>
+                        <a href=" {{url_for('home')}} ">
+                            <img src="../static/img/svg/home.svg" alt="">
+                        </a></span> <span>Home</span></button> 
+                        <ul class="hide">
+                            <li><label><input type="checkbox"><span>Lastedt News</span></label></li>
+                            <li><label><input type="checkbox"><span>Sports</span></label></li>
+                            <li><label><input type="checkbox"><span>Animes & Mangas</span></label></li>
+                            <li><label><input type="checkbox"><span>Sience & Tech</span></label></li>
+                            <li><label><input type="checkbox"><span>Gaming</span></label></li>
+                            <li><label><input type="checkbox"><span>Animals & Pets</span></label></li>
+                            <li><label><input type="checkbox"><span>Girls</span></label></li>
+                            <li><label><input type="checkbox"><span>Memes</span></label></li>
+                            <li><label><input type="checkbox"><span>Divers</span></label></li>
+                            <li><label><input type="checkbox"><span>Motor vehicules</span></label></li>
+                            <li><label><input type="checkbox"><span>Movies & TV</span></label></li>
+                            <li><label><input type="checkbox"><span>Arts & Draws</span></label></li>
+                            <li><label><input type="checkbox"><span>Music & Song</span></label></li>
+                        </ul>
+                    </li>         
+                    <li><button class="btn"><span>
+                        <a href="{{url_for('groups')}}"><img src="../static/img/svg/groups.svg" alt=""></a>
+                    </span><span>Groups</span></button> 
+                        <ul class="hide">
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                        </ul>
+                    </li>   
+                    <li><button class="btn"><span>
+                        <a href="{{url_for('events')}}"><img src="../static/img/svg/events.svg" alt=""></a>
+                    </span><span>Events</span></button> 
+                        <ul class="hide">
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                        </ul>
+                    </li>   
+                    <li><button class="btn"><span>
+                        <a href="{{url_for('projects')}}"><img src="../static/img/svg/projects.svg" alt=""></a>
+                    </span><span>Projects</span></button> 
+                        <ul class="hide">
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                        </ul>
+                    </li>   
+                    <li><button class="btn"><span>
+                        <a href="{{url_for('gitfolio')}}"><img src="../static/img/svg/git.svg" alt=""></a>
+                    </span><span>Gitfolio</span></button>
+                        <ul class="hide">
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                        </ul>
+                    </li>
+                    <li><button class="btn"><span>
+                        <a href="{{url_for('sassandrin')}}"><img src="../static/img/svg/language.svg" alt=""></a>
+                    </span><span>Sassandrin</span></button> 
+                        <ul class="hide">
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                        </ul>
+                    </li>     
+                    <li><button class="btn"><span>
+                        <a href="{{url_for('messages')}}"><img src="../static/img/svg/messages.svg" alt=""></a>
+                        </span><span>Messages</span></button> 
+                        <ul class="hide">
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                            <li><label><input type="checkbox"><span>azzez</span></label></li>
+                        </ul>
+                    </li>     
+                    <li><button class="logout" ><span>
+                        <a href="{{url_for('logout')}}"><img src="../static/img/svg/logout.svg" alt=""></a>
+                    </span><a href="{{url_for('logout')}}">logout</a></button></li>    
+                </div>
+                
+            </ul>
+        </nav> 
+        {% include 'includes/user-info.html' %}
+    </div>
+    <section>
+        <h1 class="test">SASSANDRA</h1>
+        <div class="post">
+            <p> {{ err }} </p>
+            {% if current_user.is_authenticated %}
+                <p>Hi {{ current_user.username }}</p>
+                <p>Contact : {{ current_user.email }}</p>
+                <p>Followers : {{ current_user.followers }}</p>
+                <p>Following : {{ current_user.following }}</p>
+            {% endif %}
+            <form id="follow-user" action="/follow" method="post">
+                <div class="follow">
+                    <label for="follow-email"><b>Follow user</b></label>
+                    <input type="text" placeholder="User ID" name="follow-email" size="45" required>
+
+                    <button type="submit">Follow</button>
+                </div>
+            </form>
+            <form id="unfollow-user" action="/unfollow" method="post">
+                <div class="follow">
+                    <label for="unfollow-email"><b>Unfollow user</b></label>
+                    <input type="text" placeholder="Username" name="unfollow-email" size="45" required>
+
+                    <button type="submit">Unfollow</button>
+                </div>
+            </form>
+            <br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br>
+        </div>
+    </section>    
+    {% include "includes/footer.html" %}
+    
+    <script src="../static/js/nav.js"></script>
+</html>
