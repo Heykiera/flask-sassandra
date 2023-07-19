@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../static/css/bulma.min.css">
+        <link rel="stylesheet" href="../static/css/user.css">
         <link rel="stylesheet" href="../static/css/style2.css">
         <title>SASSANDRA</title>
     </head>
@@ -102,29 +103,21 @@
             </header>
             <div class="container">
                 <div class="post">
-                    <p> {{ err }} </p>
-                    {% if current_user.is_authenticated %}
-                        <p>Hi {{ current_user.username }}</p>
-                        <p>Contact : {{ current_user.email }}</p>
-                        <p>Followers : {{ current_user.followers }}</p>
-                        <p>Following : {{ current_user.following }}</p>
-                    {% endif %}
-                    <form id="follow-user" action="/follow" method="post">
-                        <div class="follow">
-                            <label for="follow-email"><b>Follow user</b></label>
-                            <input type="text" placeholder="User email" name="follow-email" size="45" required>
-
-                            <button type="submit">Follow</button>
-                        </div>
-                    </form>
-                    <form id="unfollow-user" action="/unfollow" method="post">
-                        <div class="follow">
-                            <label for="unfollow-email"><b>Unfollow user</b></label>
-                            <input type="text" placeholder="User email" name="unfollow-email" size="45" required>
-
-                            <button type="submit">Unfollow</button>
-                        </div>
-                    </form>
+                    <div class="user-profile"> 
+                        <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="User Picture">
+                        <h3 class="username"><strong>@{{ user.username }}</strong></h3>
+                        <h4 class="user-email"><strong>{{ user.email }}</strong></h4>
+                    </div>
+                    <div class="user-truc">
+                        <h4>Followers {{ followers|count }}</h4>
+                        <!-- {% for follower in followers %}
+                            <p>{{ follower.email }}  </p>
+                        {% endfor %} -->
+                        <h4>Following {{ following|count }}</h4>
+                        <!-- {% for follow in following %}
+                            <p>{{ follow.email }}  </p>
+                        {% endfor %} -->
+                    </div>
                     <br><br><br><br><br><br><br><br><br><br>
                     <br><br><br><br><br><br><br><br><br><br>
                 </div>

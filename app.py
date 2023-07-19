@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
 from flask_wtf import FlaskForm
+from flask_cors import CORS
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.validators import InputRequired, ValidationError, Length, DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -96,6 +97,9 @@ def register():
         username = request.form['uname']
         email = request.form['email']
         password = request.form['psw']
+        # username = request.json.get('uname')
+        # email = request.json.get('email')
+        # password = request.json.get('psw')
         # Hash the password
         password_hash = generate_password_hash(password)
         # Get the file image
@@ -108,7 +112,7 @@ def register():
             random_string = ''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16))
             # Assume profile_image is the uploaded image file
             file_ext = os.path.splitext(profile_image.filename)[1]
-            new_filename = random_string + file_ext
+            new_filename = random_string + '_' + username + file_ext 
             # Save the uploaded file with the new filename
             profile_image.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
         # Chech the username
@@ -126,7 +130,7 @@ def register():
             print('email already exists. Please choose a different email.')
             return jsonify({'message':'Email already exists. Please choose a different Email.'}), 400
         # create new user
-        new_user = User(username = username, email = email, password = password_hash, profile_image = new_filename)
+        new_user = User(username = username, email = email, password = password_hash, profile_image = new_filename, followers = [], following = [])
         # add user to the database
         db.session.add(new_user)
         db.session.commit()
@@ -136,6 +140,13 @@ def register():
         session['email'] = username
         # redirect to home page
         return redirect(url_for('home'))
+        # return jsonify({
+        #     "username": current_user.username,
+        #     "email": current_user.email,
+        #     "img": current_user.profile_image,
+        #     "following": current_user.following,
+        #     "followers": current_user.followers
+        # })
     # display registration form
     return jsonify({'message':'Error exists. Please retry for register.'}), 400
 
@@ -146,20 +157,28 @@ def login():
         # get form data 
         email = request.form['email']
         password = request.form['psw']
+        # email = request.json.get('email')
+        # password = request.json.get('psw')
         # find user by username
         user = User.query.filter_by(email=email).first()
         # check if user exists and password is correct
         if user and check_password_hash(user.password, password):
             # log in the user
             login_user(user)
-            session['email'] = email
+            # Create a session for test
+            session['email'] = user.email
             # redirect to home page
             return redirect(url_for('home'))
+            # return jsonify({
+            #     "username": current_user.username,
+            #     "email": current_user.email,
+            #     "img": current_user.profile_image,
+            #     "following": current_user.following,
+            #     "followers": current_user.followers
+            # })
         # display error message
-        ### return render_template('index.html', err = 'Invalid username or password')
         return jsonify({'message': 'Invalid email or password to login'}), 400
     # display login form
-    ### return render_template('index.html', err = 'Error exists. Please retry for login.')
     return jsonify({'message': 'Error exists. Please retry for login.'}), 400
 
 @app.route('/home')
@@ -184,12 +203,18 @@ def follow():
     user_to_follow = User.query.filter_by(email = user_email).first()
     # Check if user exist
     if user_to_follow is None:
-        return jsonify({'error': 'User not found'}), 404
+        return jsonify({'error': 'User not found'}), 400
     # Check if is yourself
-    if user_to_follow == current_user.email:
+    if user_email == current_user.email: 
+        print(f"######## email utilisé {user_email} et email utilisateur {current_user.email}", file=sys.stderr)
         return jsonify({'error': 'You cannot follow yourself'}), 400
     # Add the followed user to the current user's following list
     following = json.loads(current_user.following) if current_user.following else []
+    # Check if you allready following this user
+    for test in following:
+        print("followers {test}", file=sys.stderr)
+        if test == {'email': user_to_follow.email, 'username': user_to_follow.username} :
+            return jsonify({'message': f'You alredy follow {user_to_follow.username}'}), 400
     following.append({'email': user_email, 'username': user_to_follow.username})
     current_user.following = json.dumps(following)
     # Add the current user to the followed user's followers list
@@ -199,7 +224,8 @@ def follow():
     # Commit changes to the database
     db.session.commit()
     # Return a JSON response with the updated followers and following lists
-    return jsonify({'message': f'Following {user_to_follow.username}'}), 200
+    # return jsonify({'message': f'Following {user_to_follow.username}'}), 200
+    return redirect(url_for('home'))
 
 @app.route('/unfollow', methods=['POST'])
 @login_required
@@ -208,9 +234,9 @@ def unfollow():
     # Get the user to unfollow
     print(f"######## email utilisé : {unfollow_email}", file=sys.stderr)
     user_to_unfollow = User.query.filter_by(email=unfollow_email).first()
-    print(f"######## User unfollow infos : {user_to_unfollow.followers}", file=sys.stderr)
     if user_to_unfollow is None:
-        return jsonify({'error': 'User not found'}), 404
+        return jsonify({'error': 'User not found'}), 400
+    print(f"######## User unfollow infos : {user_to_unfollow.followers}", file=sys.stderr)
     # Remove the email from the 'followers' field of the user to unfollow
     followers = json.loads(user_to_unfollow.followers)
     if current_user.email in followers:
@@ -226,8 +252,8 @@ def unfollow():
     # Commit changes to the database
     db.session.commit()
     # Return a JSON response with the updated followers and following lists
-    return jsonify({'message': f'Unfollowed {unfollow_email}'}), 200
-
+    # return jsonify({'message': f'Unfollowed {unfollow_email}'}), 200
+    return redirect(url_for('home'))
 
 @app.route('/messages')
 @login_required
@@ -244,10 +270,6 @@ def groups():
 def events():
     return render_template('home.html')
 
-@app.route('/projects')
-@login_required
-def projects():
-    return render_template('home.html')
 
 @app.route('/gitfolio')
 @login_required
@@ -263,7 +285,20 @@ def sassandrin():
 @app.route('/profile')
 @login_required
 def profile():
+
     return render_template('home.html')
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    followers = json.loads(user.followers)
+    following = json.loads(user.following)
+
+    print(f"followers : {followers}", file=sys.stderr)
+    print(f"following : {followers}", file=sys.stderr)
+
+    return render_template('profile.html', user = user, following = following, followers = followers)
 
 @app.route('/settings')
 @login_required
