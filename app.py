@@ -292,8 +292,8 @@ def profile():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    followers = json.loads(user.followers)
-    following = json.loads(user.following)
+    followers = json.loads(user.followers) if user.followers else []
+    following = json.loads(user.following) if user.following else []
 
     print(f"followers : {followers}", file=sys.stderr)
     print(f"following : {followers}", file=sys.stderr)

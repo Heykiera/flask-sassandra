@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="../static/css/bulma.min.css">
         <link rel="stylesheet" href="../static/css/user.css">
         <link rel="stylesheet" href="../static/css/style2.css">
@@ -104,19 +105,35 @@
             <div class="container">
                 <div class="post">
                     <div class="user-profile"> 
-                        <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="User Picture">
+                        <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="User Picture" class="w3-border">
                         <h3 class="username"><strong>@{{ user.username }}</strong></h3>
                         <h4 class="user-email"><strong>{{ user.email }}</strong></h4>
                     </div>
                     <div class="user-truc">
-                        <h4>Followers {{ followers|count }}</h4>
-                        <!-- {% for follower in followers %}
-                            <p>{{ follower.email }}  </p>
-                        {% endfor %} -->
-                        <h4>Following {{ following|count }}</h4>
-                        <!-- {% for follow in following %}
-                            <p>{{ follow.email }}  </p>
-                        {% endfor %} -->
+                        <button onclick="document.getElementById('id02').style.display='block'" class="w3-button w3-blue">
+                            <h4>Followers {{ followers|count }}</h4></button>
+                        <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-blue">
+                            <h4>Following {{ following|count }}</h4></button>
+                        <div id="id01" class="w3-modal">
+                            <div class="w3-modal-content">
+                                <div class="w3-container">
+                                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                    {% for follow in following %}
+                                        <p> <a href="{{ url_for('user', username=follow.username) }}">{{ follow.username }}</a></p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div id="id02" class="w3-modal">
+                            <div class="w3-modal-content">
+                                <div class="w3-container">
+                                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                    {% for follower in followers %}
+                                        <p> <a href="{{ url_for('user', username=follower.username) }}">{{ follower.username }}</a></p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <br><br><br><br><br><br><br><br><br><br>
                     <br><br><br><br><br><br><br><br><br><br>

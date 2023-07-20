@@ -5,31 +5,61 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../static/css/bulma.min.css">
-        <link rel="stylesheet" href="../static/css/style.css">
+        <link rel="stylesheet" href="../static/css/style2.css">
         <title>SASSANDRA</title>
     </head>
     <body>
-        <div class="sidebar">
-            <h1 class="sidebar-title">SASSANDRA</h1>
-            {% include 'includes/form-login.html' %}
-            <div id="error-message"></div>
-            <p class="or"> ---- Or -----</p>
-            {% include 'includes/form-register.html' %}
-            <div id="error-register"></div>
-        </div>
-        <section>
-            <h1 class="test">SASSANDRA</h1>
-            <div class="post">
-                <p> {{ err }} </p>
-                {% for user in data %}
-                    <p> {{ user }} </p>
-                {% endfor %}
-                <br><br><br><br><br><br><br>
-                <br><br><br><br><br><br><br>
-                <br><br><br><br><br><br><br>
+        <aside>
+            <header>
+                <h1>SASSANDRA</h1>
+            </header>
+            <div class="sidebar">
+                {% include 'includes/form-login.html' %}
+                <div id="error-message"></div>
+                <p class="or"> ---- Or -----</p>
+                {% include 'includes/form-register.html' %}
+                <div id="error-register"></div>
             </div>
+        </aside>
+        <section>
+            <header>
+                <h1>SASSANDRA</h1>
+            </header>
+            <div class="container">
+                <div class="post">
+                    <p> {{ err }} </p>
+                    
+                    <br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br>
+                </div>
+            </div>
+            <footer>
+                <div class="column">
+                    <h1 style="font-size: xx-large;">SASSANDRA</h1>
+                </div>
+                <div class="column">
+                    <h2 style="font-size: larger;">A propos</h2>
+                    <p>_ Qui sommes nous ?</p>
+            
+                </div>
+                <div class="column">
+                    <h2 style="font-size: larger;">Besoin d'aide</h2>
+                    <p>_ Information sur la positon ?</p>
+                    <p>_ Paiement</p>
+                    <p>_ Livraison</p>
+                    <p>_ Aide et assistance</p>
+                </div>
+                <div class="column">
+                    <h2 style="font-size: larger;">La loi et l'ordre</h2>
+                    <p>_ Conditions générales d'utilisation</p>
+                    <p>_ Protection des données</p>
+                    <p>_ Cookies</p>
+                    <span style="color: darkgray; font-size: small;">Achats 0% sécurisés</span>
+                </div>
+            </footer>
         </section>
-        {% include "includes/footer.html" %}
+        <script src="../static/js/script.js"></script>
+        <script src="../static/js/nav.js"></script>
     </body>
-    <script src="../static/js/login.js"></script>
 </html>
