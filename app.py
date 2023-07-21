@@ -28,28 +28,11 @@ class User(db.Model, UserMixin):
     profile_image = db.Column(db.String(120), nullable=True)
     following = db.Column(db.JSON)
     followers = db.Column(db.JSON)
+    descript = db.Column(db.String(240))
 
     def __repr__(self):
         return '<User %r>' % self.username
     
-# Liste theme of post
-themes = ['Lastest News',
-        'Sports',
-        'Politics',
-        'Animes & Mangas',
-        'Sience & Tech',
-        'Gaming',
-        'Animals & Pets',
-        'Girls',
-        'Memes',
-        'Food & Drinks',
-        'Lifestyles',
-        'Divers',
-        'Motor vehicules',
-        'Movies & TV',
-        'Arts & Draws',
-        'Music & Song']
-
 # create login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -291,6 +274,8 @@ def profile():
 @app.route('/user/<username>')
 @login_required
 def user(username):
+    # if username == current_user.username:
+
     user = User.query.filter_by(username=username).first_or_404()
     followers = json.loads(user.followers) if user.followers else []
     following = json.loads(user.following) if user.following else []
@@ -299,6 +284,17 @@ def user(username):
     print(f"following : {followers}", file=sys.stderr)
 
     return render_template('profile.html', user = user, following = following, followers = followers)
+
+@app.route('/description', methods=['POST'])
+@login_required
+def decript():
+    if request.method == 'POST':
+        descript = request.form['descript']
+    print(f"description : {descript}", file=sys.stderr)
+    user = User.query.filter_by(email=current_user.email).first_or_404()
+    user.descript = descript
+    db.session.commit()
+    return redirect(f'/user/{current_user.username}')
 
 @app.route('/settings')
 @login_required

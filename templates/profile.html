@@ -110,10 +110,11 @@
                         <h4 class="user-email"><strong>{{ user.email }}</strong></h4>
                     </div>
                     <div class="user-truc">
-                        <button onclick="document.getElementById('id02').style.display='block'" class="w3-button w3-blue">
-                            <h4>Followers {{ followers|count }}</h4></button>
-                        <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-blue">
-                            <h4>Following {{ following|count }}</h4></button>
+                        <div>
+                            <button onclick="document.getElementById('id02').style.display='block'" class="w3-button w3-blue"><h4>Followers {{ followers|count }}</h4></button>
+                            <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-blue"><h4>Following {{ following|count }}</h4></button>
+                        </div>
+                        
                         <div id="id01" class="w3-modal">
                             <div class="w3-modal-content">
                                 <div class="w3-container">
@@ -134,7 +135,26 @@
                                 </div>
                             </div>
                         </div>
+                        <br><br><br>
+                        <div class="descript" style="display: inline-block;">
+                            <p>{{ user.descript }}</p>
+                            {% if user.username == current_user.username %}
+                            <button onclick="document.getElementById('id03').style.display='block'" class="w3-margin w3-button w3-green"><h4> Modif </h4></a></button>
+                            <div id="id03" class="w3-modal">
+                                <div class="w3-modal-content">
+                                    <div class="w3-container">
+                                        <form id="register-form" action="/description" method="post" enctype="multipart/form-data">
+                                            <textarea name="descript" cols="50" rows="5" class="z3-right w3-margin">
+                                            </textarea>
+                                            <button type="submit" onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-green w3-display-topright">Save</button>
+                                        </form>
+                                    </div>  
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
+                    
                     <br><br><br><br><br><br><br><br><br><br>
                     <br><br><br><br><br><br><br><br><br><br>
                 </div>
