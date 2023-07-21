@@ -22,3 +22,11 @@
     margin: 10px;
 }
 
+.follow {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    align-items: center;
+    margin-right: 5px;
+    border-radius: 3px;
+}

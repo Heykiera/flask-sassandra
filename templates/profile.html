@@ -120,7 +120,7 @@
                                 <div class="w3-container">
                                     <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                                     {% for follow in following %}
-                                        <p> <a href="{{ url_for('user', username=follow.username) }}">{{ follow.username }}</a></p>
+                                        <p><img class="follow" src="{{ url_for('static', filename='uploads/' + follow.profile_image) }}" alt=""><a href="{{ url_for('user', username=follow.username) }}">{{ follow.username }}</a></p>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -130,7 +130,7 @@
                                 <div class="w3-container">
                                     <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                                     {% for follower in followers %}
-                                        <p> <a href="{{ url_for('user', username=follower.username) }}">{{ follower.username }}</a></p>
+                                        <p> <img class="follow w3-border" src="{{ url_for('static', filename='uploads/' + follower.profile_image) }}" alt=""><a href="{{ url_for('user', username=follower.username) }}">{{ follower.username }}</a></p>
                                     {% endfor %}
                                 </div>
                             </div>

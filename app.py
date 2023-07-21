@@ -198,11 +198,11 @@ def follow():
         print("followers {test}", file=sys.stderr)
         if test == {'email': user_to_follow.email, 'username': user_to_follow.username} :
             return jsonify({'message': f'You alredy follow {user_to_follow.username}'}), 400
-    following.append({'email': user_email, 'username': user_to_follow.username})
+    following.append({'email': user_email, 'username': user_to_follow.username, 'profile_image': user_to_follow.profile_image })
     current_user.following = json.dumps(following)
     # Add the current user to the followed user's followers list
     followers = json.loads(user_to_follow.followers) if user_to_follow.followers else []
-    followers.append({'email': current_user.email, 'username': current_user.username})
+    followers.append({'email': current_user.email, 'username': current_user.username, 'profile_image': current_user.profile_image})
     user_to_follow.followers = json.dumps(followers)
     # Commit changes to the database
     db.session.commit()
