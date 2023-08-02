@@ -46,32 +46,24 @@ def load_user(user_id):
 @app.before_first_request
 def create_tables():
     db.create_all()
-
-# home page
-@app.route('/')
-def index():
-    return render_template('index.html')
-
+    
 # valid email
 def is_valid_email(email):
     try:
         print(email, file=sys.stderr)
         valid = validate_email(email)
-        print(valid, file=sys.stderr)
-        print('*************', file=sys.stderr)
         email = valid.email
         return True
     except EmailNotValidError as e:
         return False
+    
+# home page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-# valid username
-def is_valid_username(username):
-    if len(username) < 3:
-        return False
-    if not re.match("^[a-zA-Z0-9_-]+$", username):
-        return False
-    return True
 
+    
 # registration page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -80,10 +72,16 @@ def register():
         username = request.form['uname']
         email = request.form['email']
         password = request.form['psw']
-        # username = request.json.get('uname')
-        # email = request.json.get('email')
-        # password = request.json.get('psw')
-        # Hash the password
+        if len(password) < 8:
+            return jsonify({'message': 'Password must be at least 8 characters long.'}), 400
+        if not any(char.isdigit() for char in password):
+            return jsonify({'message': 'Password must contain at least one digit.'}), 400
+        if not any(char.isupper() for char in password):
+            return jsonify({'message': 'Password must contain at least one uppercase letter.'}), 400
+        if not any(char.islower() for char in password):
+            return jsonify({'message': 'Password must contain at least one lowercase letter.'}), 400
+        if not any(char in string.punctuation for char in password):
+            return jsonify({'message': 'Password must contain at least one special character.'}), 400
         password_hash = generate_password_hash(password)
         # Get the file image
         if 'file' not in request.files:
@@ -98,20 +96,11 @@ def register():
             new_filename = random_string + '_' + username + file_ext 
             # Save the uploaded file with the new filename
             profile_image.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
-        # Chech the username
-        if not is_valid_username(username):
-            return jsonify({'message': 'Invalid username'}), 400
-        existing_user = User.query.filter_by(username=username).first()
+        # Chech the username & e-mail
+        existing_user = User.query.filter_by(username=username, email=email).first()
         if existing_user:
-            print('Username already exists. Please choose a different username.')
-            return jsonify({'message':'Username already exists. Please choose a different username.'}), 400
-        # Check email
-        if not is_valid_email(email):
-            return jsonify({'message':'Invalid Email'}), 400
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            print('email already exists. Please choose a different email.')
-            return jsonify({'message':'Email already exists. Please choose a different Email.'}), 400
+            print('User with the same username and email already exists. Please choose a different username and email.')
+            return jsonify({'message':'User with the same username and email already exists. Please choose a different username and email.'}), 400
         # create new user
         new_user = User(username = username, email = email, password = password_hash, profile_image = new_filename, followers = [], following = [])
         # add user to the database
